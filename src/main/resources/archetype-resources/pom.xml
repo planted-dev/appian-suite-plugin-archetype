@@ -1,10 +1,13 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>${groupId}</groupId>
-  <artifactId>${artifactId}</artifactId>
-  <version>${version}</version>
+  <groupId>${symbol_dollar}{project.groupId}</groupId>
+  <artifactId>${symbol_dollar}{project.artifactId}</artifactId>
+  <version>${symbol_dollar}{project.version}</version>
 
   <!-- name, url and description values are used in appian-plugin.xml -->
   <name>_SET_VALUE_</name>
@@ -28,68 +31,38 @@
   </dependencies>
 
   <build>
-    <resources>
-      <!-- Include appian-plugin.xml -->
-      <resource>
-        <directory>src</directory>
-        <filtering>true</filtering>
-        <includes>
-          <include>appian-plugin.xml</include>
-        </includes>
-      </resource>
-      <!-- Include source files -->
-      <resource>
-        <directory>src/main/java</directory>
-        <targetPath>src</targetPath>
-      </resource>
-      <!-- Include properties and icons -->
-      <resource>
-        <directory>src/main/resources</directory>
-      </resource>
-    </resources>
-    <pluginManagement>
-      <!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
-      <plugins>
-        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
-        <plugin>
-          <artifactId>maven-clean-plugin</artifactId>
-          <version>3.1.0</version>
-        </plugin>
-        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>2.5.2</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>2.8.2</version>
-        </plugin>
-        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
-        <plugin>
-          <artifactId>maven-site-plugin</artifactId>
-          <version>3.7.1</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-project-info-reports-plugin</artifactId>
-          <version>3.0.0</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
+   <!-- Copy dependency JAR files -->
+   <plugins>
+    <plugin>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <configuration>
+        <artifactItems>
+          <!-- Repeat for each dependency JAR to be included -->
+          <artifactItem>
+            <groupId>_DEPENDENCY_GROUP_ID_</groupId>
+            <artifactId>_DEPENDENCY_ARTIFACT_ID_</artifactId>
+            <version>_DEPENDENCY_VERSION_</version>
+            <type>jar</type>
+          </artifactItem>
+        </artifactItems>
+      </configuration>
+    </plugin>
+    <plugin>
+      <artifactId>maven-assembly-plugin</artifactId>
+      <configuration>
+        <descriptors>
+          <descriptor>src/assembly/assembly.xml</descriptor>
+        </descriptors>
+        <finalName>${symbol_dollar}{project.artifactId}</finalName>
+      </configuration>
+      <executions>
+        <execution>
+          <goals>
+            <goal>single</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
   </build>
 </project>
