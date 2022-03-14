@@ -10,5 +10,7 @@ Using a terminal
 1. Clone the repo
 2. Browse to the repo location
 3. Enter the following commands
-    * mvn install
-    * mvn install archetype:update-local-catalog
+```
+mvn install
+mvn archetype:update-local-catalog
+```
