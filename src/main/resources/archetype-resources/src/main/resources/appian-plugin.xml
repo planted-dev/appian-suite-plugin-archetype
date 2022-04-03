@@ -1,14 +1,11 @@
-#set( $symbol_pound = '#' )
-#set( $symbol_dollar = '$' )
-#set( $symbol_escape = '\' )
-<appian-plugin name="${symbol_dollar}{project.name}" key="${symbol_dollar}{project.groupId}">
+<appian-plugin name="${project.name}" key="${project.groupId}">
     <plugin-info>
-        <description>${symbol_dollar}{project.description}</description>
-        <vendor url="${symbol_dollar}{project.url}" />
-        <version>${symbol_dollar}{project.version}</version>
+        <description>${project.description}</description>
+        <vendor url="${project.url}" />
+        <version>${project.version}</version>
     </plugin-info>
     <!-- Functions -->
-    <function key="appianFunction" class="${symbol_dollar}{project.groupId}.Function" />
+    <function key="appianFunction" class="${project.groupId}.Function" />
     <!-- Smart Services -->
-	<smart-service name="Appian Smart Service" key="appianSmartService" class="${symbol_dollar}{project.groupId}.SmartService" /> 
+	<smart-service name="Appian Smart Service" key="appianSmartService" class="${project.groupId}.SmartService" /> 
 </appian-plugin>

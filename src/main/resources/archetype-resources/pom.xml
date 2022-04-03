@@ -1,13 +1,10 @@
-#set( $symbol_pound = '#' )
-#set( $symbol_dollar = '$' )
-#set( $symbol_escape = '\' )
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>${symbol_dollar}{project.groupId}</groupId>
-  <artifactId>${symbol_dollar}{project.artifactId}</artifactId>
-  <version>${symbol_dollar}{project.version}</version>
+  <groupId>${groupId}</groupId>
+  <artifactId>${artifactId}</artifactId>
+  <version>${version}</version>
 
   <!-- name, url and description values are used in appian-plugin.xml -->
   <name>_SET_VALUE_</name>
@@ -28,38 +25,87 @@
       <version>22.1</version>
       <scope>provided</scope>
     </dependency>
+    <!-- Add other dependencies below -->
+    <!-- Remove if no dependencies -->
+    <dependency>
+      <groupId>com.example</groupId>
+      <artifactId>example</artifactId>
+      <version>1.0.0</version>
+    </dependency>
   </dependencies>
 
   <build>
-   <!-- Copy dependency JAR files -->
+    <!-- Include resources -->
+   <resources>
+    <!-- Source code -->
+    <resource>
+      <directory>${project.build.sourceDirectory}</directory>
+      <filtering>true</filtering>
+      <includes>
+        <include>**/*.java</include>
+      </includes>
+    </resource>
+    <!-- appian-plugin.xml -->       
+    <resource>
+      <directory>${project.basedir}/src/main/resources</directory>
+      <filtering>true</filtering>
+      <includes>
+        <include>appian-plugin.xml</include>
+      </includes>
+    </resource>
+    <!-- properties files and images -->
+    <resource>
+      <directory>${project.basedir}/src/main/resources</directory>
+      <filtering>true</filtering>
+      <includes>
+        <include>**/*</include>
+      </includes>
+      <excludes>
+        <exclude>appian-plugin.xml</exclude>
+      </excludes>
+    </resource>
+  </resources>  
    <plugins>
+    <!-- Copy Resources -->
     <plugin>
-      <artifactId>maven-dependency-plugin</artifactId>
-      <configuration>
-        <artifactItems>
-          <!-- Repeat for each dependency JAR to be included -->
-          <artifactItem>
-            <groupId>_DEPENDENCY_GROUP_ID_</groupId>
-            <artifactId>_DEPENDENCY_ARTIFACT_ID_</artifactId>
-            <version>_DEPENDENCY_VERSION_</version>
-            <type>jar</type>
-          </artifactItem>
-        </artifactItems>
-      </configuration>
-    </plugin>
-    <plugin>
-      <artifactId>maven-assembly-plugin</artifactId>
-      <configuration>
-        <descriptors>
-          <descriptor>src/assembly/assembly.xml</descriptor>
-        </descriptors>
-        <finalName>${symbol_dollar}{project.artifactId}</finalName>
-      </configuration>
+      <artifactId>maven-resources-plugin</artifactId>
+      <version>3.2.0</version>
       <executions>
         <execution>
+          <id>copy-resources</id>
           <goals>
-            <goal>single</goal>
+            <goal>copy-resources</goal>
           </goals>
+          <configuration>
+            <outputDirectory>${project.build.outputDirectory}</outputDirectory>            
+          </configuration>            
+        </execution>
+      </executions>
+    </plugin>
+    <!-- Copy dependency JAR files -->
+    <!-- Remove maven-dependency-plugin if no dependencies -->
+    <plugin>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <version>3.3.0</version>
+      <executions>
+        <execution>
+          <id>copy-depencencies</id>
+          <phase>prepare-package</phase>
+          <goals>
+            <goal>copy</goal>
+          </goals>
+          <configuration>
+            <outputDirectory>${project.build.outputDirectory}/META-INF/lib</outputDirectory>
+            <artifactItems>
+              <!-- Add artifact for each dependency, excluding Appian SDK -->
+              <artifact>
+                <groupId>com.example</groupId>
+                <artifactId>example</artifactId>
+                <version>1.0.0</version>
+                <type>jar</type>
+              </artifact>
+            </artifactItems>
+          </configuration>
         </execution>
       </executions>
     </plugin>
